@@ -5,10 +5,9 @@ async function run() {
   const page = await browser.newPage();
   try {
     await page.goto(
-      "http://www.howstat.com/cricket/Statistics/IPL/MatchScorecard.asp?MatchCode=0959"
+      "http://www.howstat.com/cricket/Statistics/IPL/MatchScorecard.asp?MatchCode=0959&Print=Y"
     );
-    // Select all tr elements
-    const trElements = await page.$$("tr");
+    // match details
     const teamsHTML = await page.$$("tr[bgcolor='#a5d3ca']");
     const teams = [];
     for (const team of teamsHTML)
@@ -16,7 +15,26 @@ async function run() {
         const _team = await (await team.getProperty("innerText")).jsonValue();
         teams.push(_team.split("(")[0].trim());
       }
-    console.log(JSON.stringify(teams));
+    const headers = await page.$$("td.ScorecardHeader");
+    for (let i = 0; i < headers.length; ++i) {
+      const scoreInfo = await (
+        await headers[i].getProperty("innerText")
+      ).jsonValue();
+      switch (i) {
+        case 1:
+          //  Venue
+          matchDetails["venue"] = scoreInfo;
+        case 2:
+          // Date
+          matchDetails["date"] = scoreInfo;
+        case 3:
+          // result
+          matchDetails["winner"] = scoreInfo.split("won")[0].trim();
+      }
+    }
+    console.log(JSON.stringify(matchDetails));
+    // Select all tr elements
+    const trElements = await page.$$("tr");
     // for (const trElement of trElements) {
     //   // player element
     //   const aElement = await trElement.$("a.ScorecardLink1");
