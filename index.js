@@ -8,13 +8,20 @@ async function run() {
       "http://www.howstat.com/cricket/Statistics/IPL/MatchScorecard.asp?MatchCode=0959&Print=Y"
     );
     // match details
+    const matchDetails = {};
     const teamsHTML = await page.$$("tr[bgcolor='#a5d3ca']");
-    const teams = [];
-    for (const team of teamsHTML)
-      if (team) {
-        const _team = await (await team.getProperty("innerText")).jsonValue();
-        teams.push(_team.split("(")[0].trim());
+    for (let i = 0; i < teamsHTML.length; ++i) {
+      const team = await (
+        await teamsHTML[i].getProperty("innerText")
+      ).jsonValue();
+
+      switch (i) {
+        case 0:
+          matchDetails["batting_first"] = team.split("(")[0].trim();
+        case 1:
+          matchDetails["batting_second"] = team.split("(")[0].trim();
       }
+    }
     const headers = await page.$$("td.ScorecardHeader");
     for (let i = 0; i < headers.length; ++i) {
       const scoreInfo = await (
