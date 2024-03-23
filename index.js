@@ -46,6 +46,7 @@ async function run() {
     };
     const trElements = await page.$$("tr");
     const players = [];
+    const catches = [];
     for (const trElement of trElements) {
       // batting or bowling
       const block10 = await trElement.$("td.TextBlackBold10");
@@ -77,7 +78,7 @@ async function run() {
           wickets_taken: null,
           economy: null,
           percent_wickets: null,
-          catches: null,
+          catches: 0,
           opponent: null,
         };
         const info = [];
@@ -116,27 +117,50 @@ async function run() {
         // Batsman
         if (info.length === 9) {
           // players.push(info);
-
           for (let i = 0; i < info.length; ++i) {
-            switch (i) {
-              case 0:
-                player_block["player_name"] = info[i];
-              case 1:
-                player_block["dismissal"] = info[i];
-              case 2:
-                player_block["runs_scored"] = parseInt(info[i]);
-              case 3:
-                player_block["balls_faced"] = parseInt(info[i]);
-              case 4:
-                player_block["fours"] = parseInt(info[i]);
-              case 5:
-                player_block["sixes"] = parseInt(info[i]);
-              case 6:
-                player_block["strike_rate"] = parseFloat(info[i]);
-              case 7:
-                player_block["percent_runs"] = info[i];
-              case 8:
-                player_block["opponent"] = info[i];
+            if (i === 0) {
+              player_block["player_name"] = info[i];
+            }
+            if (i === 1) {
+              const c = info[i].split("c ");
+              if (c[0] == "") {
+                const name = c[1].split(" b ")[0];
+                let cleanedName = name;
+                if (name.startsWith("†")) {
+                  cleanedName = name.split("†")[1];
+                }
+                const catchindex = catches?.findIndex(
+                  (c) => c.name === cleanedName
+                );
+                if (catchindex !== -1) {
+                  catches[catchindex].catches++;
+                } else {
+                  catches.push({ name: cleanedName, catches: 1 });
+                }
+              }
+              player_block["dismissal"] = info[i];
+            }
+            // catches
+            if (i === 2) {
+              player_block["runs_scored"] = parseInt(info[i]);
+            }
+            if (i === 3) {
+              player_block["balls_faced"] = parseInt(info[i]);
+            }
+            if (i === 4) {
+              player_block["fours"] = parseInt(info[i]);
+            }
+            if (i === 5) {
+              player_block["sixes"] = parseInt(info[i]);
+            }
+            if (i === 6) {
+              player_block["strike_rate"] = parseFloat(info[i]);
+            }
+            if (i === 7) {
+              player_block["percent_runs"] = info[i];
+            }
+            if (i === 8) {
+              player_block["opponent"] = info[i];
             }
           }
           players.push(player_block);
@@ -172,7 +196,8 @@ async function run() {
         }
       }
     }
-    console.log({ players });
+    console.log(catches);
+    // console.log({ players });
   } catch (error) {
     console.error("error", error.message);
   } finally {
