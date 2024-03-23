@@ -167,6 +167,8 @@ async function run() {
             (p) => p?.player_name === info[0]
           )[0];
           player_block = { ...player_block, ...match_block };
+          // remove playes
+          players.splice(index, 1);
         }
         // Batsman
         if (info.length === 9) {
@@ -260,10 +262,8 @@ async function run() {
         players[playerIndex].catches = c.catches;
       }
     });
-
-    console.log(catches);
-    console.log({ players });
-    console.log(players.length);
+    // console.log({ players });
+    // console.log(players.length);
     const filePath = "data.json";
     fs.writeFile(
       filePath,
