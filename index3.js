@@ -1,4 +1,22 @@
 const fs = require("fs");
+const PLAYER_SKELETON = {
+  player_name: null,
+  dismissal: null,
+  runs_scored: null,
+  balls_faced: null,
+  fours: null,
+  sixes: null,
+  strike_rate: null,
+  percent_runs: null,
+  overs: null,
+  maidens: null,
+  runs_given: null,
+  wickets_taken: null,
+  economy: null,
+  percent_wickets: null,
+  catches: 0,
+  opponent: null,
+};
 const puppeteer = require("puppeteer");
 async function run() {
   const browser = await puppeteer.launch();
@@ -60,27 +78,40 @@ async function run() {
           count["BOWLING"]++;
         }
       }
+      // did not bat players
+      const balck9 = await trElement.$("td.TextBlackBold9");
+      // if (balck9) {
+      //   const block = await (await balck9.getProperty("innerText")).jsonValue();
+      //   const cleanedBlock = block.trim() === "Did Not Bat";
+      //   if (cleanedBlock) {
+      //     // first batting left
+      //     if (count["BATTING"] === 2 && count["BOWLING"] === 0) {
+      //       const playersHTML = await trElement.$$("a.LinkBlack2");
+      //       for (const p of playersHTML) {
+      //         const name = await (await p.getProperty("innerText")).jsonValue();
+      //         players.push({
+      //           ...PLAYER_SKELETON,
+      //           player_name: name,
+      //           opponent: match_details["batting_second"],
+      //         });
+      //       }
+      //     } else if (count["BATTING"] === 3 && count["BOWLING"] === 2) {
+      //       const playersHTML = await trElement.$$("a.LinkBlack2");
+      //       for (const p of playersHTML) {
+      //         const name = await (await p.getProperty("innerText")).jsonValue();
+      //         players.push({
+      //           ...PLAYER_SKELETON,
+      //           player_name: name,
+      //           opponent: match_details["batting_first"],
+      //         });
+      //       }
+      //     }
+      //   }
+      // }
       // player element
       const aElement = await trElement.$("a.ScorecardLink1");
       if (aElement) {
-        let player_block = {
-          player_name: null,
-          dismissal: null,
-          runs_scored: null,
-          balls_faced: null,
-          fours: null,
-          sixes: null,
-          strike_rate: null,
-          percent_runs: null,
-          overs: null,
-          maidens: null,
-          runs_given: null,
-          wickets_taken: null,
-          economy: null,
-          percent_wickets: null,
-          catches: 0,
-          opponent: null,
-        };
+        let player_block = PLAYER_SKELETON;
         const info = [];
         const player = await (
           await aElement.getProperty("innerText")
@@ -112,6 +143,8 @@ async function run() {
           const match_block = players?.filter(
             (p) => p?.player_name === info[0]
           )[0];
+          console.log("match_block", match_block);
+          console.log("player", player);
           player_block = { ...player_block, ...match_block };
         }
         // Batsman
@@ -167,6 +200,8 @@ async function run() {
         }
         // Bowler
         if (info.length === 8) {
+          // console.log(info);
+          // console.log(player_block);
           // players.push(info);
           for (let i = 0; i < info.length; ++i) {
             switch (i) {
@@ -192,17 +227,16 @@ async function run() {
         }
       }
     }
-    catches.forEach((c) => {
-      const playerIndex = players.findIndex((p) =>
-        p.player_name.includes(c.name)
-      );
-      if (playerIndex !== -1) {
-        players[playerIndex].catches = c.catches;
-      }
-    });
-    console.log(catches);
-    console.log({ players });
-    console.log(players.length);
+    // catches.forEach((c) => {
+    //   const playerIndex = players.findIndex((p) =>
+    //     p.player_name.includes(c.name)
+    //   );
+    //   if (playerIndex !== -1) {
+    //     players[playerIndex].catches = c.catches;
+    //   }
+    // });
+    // console.log({ players });
+    // console.log(players.length);
   } catch (error) {
     console.error("error", error.message);
   } finally {
