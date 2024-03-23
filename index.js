@@ -172,10 +172,10 @@ async function run() {
         if (info.length === 9) {
           // players.push(info);
           for (let i = 0; i < info.length; ++i) {
-            if (i === 0) {
+            if (i === 0 && player_block["player_name"] === null) {
               player_block["player_name"] = info[i];
             }
-            if (i === 1) {
+            if (i === 1 && player_block["dismissal"] === null) {
               const c = info[i].split("c ");
               if (c[0] == "") {
                 const name = c[1].split(" b ")[0];
@@ -195,25 +195,25 @@ async function run() {
               player_block["dismissal"] = info[i];
             }
             // catches
-            if (i === 2) {
+            if (i === 2 && player_block["runs_scored"] === null) {
               player_block["runs_scored"] = parseInt(info[i]);
             }
-            if (i === 3) {
+            if (i === 3 && player_block["balls_faced"] === null) {
               player_block["balls_faced"] = parseInt(info[i]);
             }
-            if (i === 4) {
+            if (i === 4 && player_block["fours"] === null) {
               player_block["fours"] = parseInt(info[i]);
             }
-            if (i === 5) {
+            if (i === 5 && player_block["sixes"] === null) {
               player_block["sixes"] = parseInt(info[i]);
             }
-            if (i === 6) {
+            if (i === 6 && player_block["strike_rate"] === null) {
               player_block["strike_rate"] = parseFloat(info[i]);
             }
-            if (i === 7) {
+            if (i === 7 && player_block["percent_runs"] === null) {
               player_block["percent_runs"] = info[i];
             }
-            if (i === 8) {
+            if (i === 8 && player_block["opponent"] === null) {
               player_block["opponent"] = info[i];
             }
           }
@@ -223,23 +223,29 @@ async function run() {
         if (info.length === 8) {
           // players.push(info);
           for (let i = 0; i < info.length; ++i) {
-            switch (i) {
-              case 0:
-                player_block["player_name"] = info[i];
-              case 1:
-                player_block["overs"] = parseFloat(info[i]);
-              case 2:
-                player_block["maidens"] = parseInt(info[i]);
-              case 3:
-                player_block["runs_given"] = parseInt(info[i]);
-              case 4:
-                player_block["wickets_taken"] = parseInt(info[i]);
-              case 5:
-                player_block["economy"] = parseFloat(info[i]);
-              case 6:
-                player_block["percent_wickets"] = parseFloat(info[i]);
-              case 7:
-                player_block["opponent"] = info[i];
+            if (i === 0 && player_block["player_name"] === null) {
+              player_block["player_name"] = info[i];
+            }
+            if (i === 1 && player_block["overs"] === null) {
+              player_block["overs"] = parseFloat(info[i]);
+            }
+            if (i === 2 && player_block["maidens"] === null) {
+              player_block["maidens"] = parseInt(info[i]);
+            }
+            if (i === 3 && player_block["runs_given"] === null) {
+              player_block["runs_given"] = parseInt(info[i]);
+            }
+            if (i === 4 && player_block["wickets_taken"] === null) {
+              player_block["wickets_taken"] = parseInt(info[i]);
+            }
+            if (i === 5 && player_block["economy"] === null) {
+              player_block["economy"] = parseFloat(info[i]);
+            }
+            if (i === 6 && player_block["percent_wickets"] === null) {
+              player_block["percent_wickets"] = parseFloat(info[i]);
+            }
+            if (i === 7 && player_block["opponent"] === null) {
+              player_block["opponent"] = info[i];
             }
           }
           players.push(player_block);
