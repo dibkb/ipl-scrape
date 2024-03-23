@@ -9,35 +9,34 @@ async function run() {
     );
     // Select all tr elements
     const trElements = await page.$$("tr");
-    const tdTexts = [];
+    const teamsHTML = await page.$$("tr[bgcolor='#a5d3ca']");
     const teams = [];
-    for (const tr of trElements) {
-      const divwrap = await tr.$("td.ScorecardCountry3");
-      if (divwrap) {
-        const team = await (await divwrap.getProperty("innerText")).jsonValue();
-        teams.push(team);
+    for (const team of teamsHTML)
+      if (team) {
+        const _team = await (await team.getProperty("innerText")).jsonValue();
+        teams.push(_team.split("(")[0].trim());
       }
-      // player element
-      const aElement = await tr.$("a.ScorecardLink1");
-      if (aElement) {
-        const player = await (
-          await aElement.getProperty("innerText")
-        ).jsonValue();
-        // SKIP if season
-        if (player.startsWith("Season") || player.startsWith("BOWLING"));
-        const tdElements = await tr.$$("td");
-        const tdInnerTexts = [];
-        const tdTexts = [];
-        for (const td of tdElements) {
-          const tdInnerText = await (
-            await td.getProperty("innerText")
-          ).jsonValue();
-          tdInnerTexts.push(tdInnerText.trim());
-        }
-        console.log(tdTexts);
-      }
-      console.log(tdTexts);
-    }
+    console.log(JSON.stringify(teams));
+    // for (const trElement of trElements) {
+    //   // player element
+    //   const aElement = await trElement.$("a.ScorecardLink1");
+    //   if (aElement) {
+    //     const player = await (
+    //       await aElement.getProperty("innerText")
+    //     ).jsonValue();
+    //     if (!player.startsWith("Season")) {
+    //       console.log(player);
+    //       // player performance
+    //       const tdElements = await trElement.$$("td.TextBlack9");
+    //       for (const td of tdElements) {
+    //         const tdInnerText = await (
+    //           await td.getProperty("innerText")
+    //         ).jsonValue();
+    //         console.log(tdInnerText.trim());
+    //       }
+    //     }
+    //   }
+    // }
   } catch (error) {
     console.error("error", error.message);
   } finally {
