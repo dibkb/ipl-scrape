@@ -79,41 +79,41 @@ async function run() {
           count["BOWLING"]++;
         }
       }
-      // const balck9 = await trElement.$("td.TextBlackBold9");
-      // if (balck9) {
-      //   const block = await (await balck9.getProperty("innerText")).jsonValue();
-      //   const cleanedBlock = block.trim() === "Did Not Bat";
-      //   if (cleanedBlock) {
-      //     // first batting left
-      //     if (count["BATTING"] === 2 && count["BOWLING"] === 0) {
-      //       const playersHTML = await trElement.$$("a.LinkBlack2");
-      //       for (const p of playersHTML) {
-      //         const name = await (await p.getProperty("innerText")).jsonValue();
-      //         const idx = players.findIndex((p) => p.player_name === name);
-      //         if (idx === -1) {
-      //           players.push({
-      //             ...PLAYER_SKELETON,
-      //             player_name: name,
-      //             opponent: match_details["batting_second"],
-      //           });
-      //         }
-      //       }
-      //     } else if (count["BATTING"] === 3 && count["BOWLING"] === 2) {
-      //       const playersHTML = await trElement.$$("a.LinkBlack2");
-      //       for (const p of playersHTML) {
-      //         const name = await (await p.getProperty("innerText")).jsonValue();
-      //         const idx = players.findIndex((p) => p.player_name === name);
-      //         if (idx === -1) {
-      //           players.push({
-      //             ...PLAYER_SKELETON,
-      //             player_name: name,
-      //             opponent: match_details["batting_first"],
-      //           });
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
+      const balck9 = await trElement.$("td.TextBlackBold9");
+      if (balck9) {
+        const block = await (await balck9.getProperty("innerText")).jsonValue();
+        const cleanedBlock = block.trim() === "Did Not Bat";
+        if (cleanedBlock) {
+          // first batting left
+          if (count["BATTING"] === 2 && count["BOWLING"] === 0) {
+            const playersHTML = await trElement.$$("a.LinkBlack2");
+            for (const p of playersHTML) {
+              const name = await (await p.getProperty("innerText")).jsonValue();
+              const idx = players.findIndex((p) => p.player_name === name);
+              if (idx === -1) {
+                players.push({
+                  ...PLAYER_SKELETON,
+                  player_name: name,
+                  opponent: match_details["batting_second"],
+                });
+              }
+            }
+          } else if (count["BATTING"] === 3 && count["BOWLING"] === 2) {
+            const playersHTML = await trElement.$$("a.LinkBlack2");
+            for (const p of playersHTML) {
+              const name = await (await p.getProperty("innerText")).jsonValue();
+              const idx = players.findIndex((p) => p.player_name === name);
+              if (idx === -1) {
+                players.push({
+                  ...PLAYER_SKELETON,
+                  player_name: name,
+                  opponent: match_details["batting_first"],
+                });
+              }
+            }
+          }
+        }
+      }
       // player element
       const aElement = await trElement.$("a.ScorecardLink1");
       if (aElement) {
@@ -262,8 +262,8 @@ async function run() {
         players[playerIndex].catches = c.catches;
       }
     });
-    // console.log({ players });
-    // console.log(players.length);
+    console.log({ players });
+    console.log(players.length);
     const filePath = "data.json";
     fs.writeFile(
       filePath,
