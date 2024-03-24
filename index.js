@@ -264,7 +264,7 @@ async function run() {
     });
     console.log({ players });
     console.log(players.length);
-    const filePath = "data.json";
+    const filePath = `2023/${match_details["date"]}`;
     fs.writeFile(
       filePath,
       JSON.stringify({ match_details, players }),
