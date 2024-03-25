@@ -31,7 +31,7 @@ const makeURL = (no) => {
 };
 async function run() {
   try {
-    for (let i = 885; i <= 958; ++i) {
+    for (let i = 1; i <= 824; ++i) {
       await scrapematch(makeURL(i));
     }
   } catch (error) {
@@ -45,4 +45,5 @@ run();
 
 // Season 23 0959-1033
 // Season 22 0885-0958
-// Season 21 0959-1033
+// Season 21 0825-0884
+// Season 20 0765-0824
