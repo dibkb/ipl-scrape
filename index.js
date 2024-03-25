@@ -20,18 +20,18 @@ const scrapematch = require("./match.js");
 // }
 // run();
 const makeURL = (no) => {
-  let matchNo;
-  if (no.length < 4) {
-    matchNo = no.padStart(4, "0");
+  let matchNo = no.toString();
+  if (matchNo.length < 4) {
+    matchNo = matchNo.padStart(4, "0");
   } else {
-    matchNo = no;
+    matchNo = matchNo;
   }
   const BASE_URL = `http://www.howstat.com/cricket/statistics/IPL/MatchScorecard.asp?MatchCode=${matchNo}`;
   return BASE_URL;
 };
 async function run() {
   try {
-    for (let i = 1000; i <= 1033; ++i) {
+    for (let i = 885; i <= 958; ++i) {
       await scrapematch(makeURL(i));
     }
   } catch (error) {
@@ -43,4 +43,6 @@ run();
 //   "http://www.howstat.com/cricket/statistics/IPL/MatchScorecard.asp?MatchCode=0959"
 // );
 
-// Season
+// Season 23 0959-1033
+// Season 22 0885-0958
+// Season 21 0959-1033
