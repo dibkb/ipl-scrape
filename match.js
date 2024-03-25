@@ -1,4 +1,5 @@
 const fs = require("fs");
+const puppeteer = require("puppeteer");
 const path = require("path");
 const PLAYER_SKELETON = {
   player_name: null,
@@ -18,7 +19,6 @@ const PLAYER_SKELETON = {
   catches: 0,
   opponent: null,
 };
-const puppeteer = require("puppeteer");
 async function scrapematch(match) {
   const match_details = {};
 
